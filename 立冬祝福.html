@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>立冬爱心祝福完整流程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f0f8ff;
+            font-family: "微软雅黑", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 1. 初始弹窗样式（确保可点击） */
+        .start-popup {
+            background: #fff;
+            padding: 30px 50px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100; /* 层级最高，优先点击 */
+            position: relative; /* 确保点击区域有效 */
+        }
+        .start-popup:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0,0,0,0.15);
+        }
+        .start-popup h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        .start-popup p {
+            color: #7f8c8d;
+            font-size: 18px;
+        }
+
+        /* 2. 过渡页面样式 */
+        .transition-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #f0f8ff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 90;
+            display: none;
+        }
+        .transition-title {
+            color: #2c3e50;
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+        .transition-text {
+            color: #34495e;
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+        .next-btn {
+            padding: 12px 30px;
+            background: #ff85a2;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .next-btn:hover {
+            background: #ff6b8b;
+            transform: scale(1.05);
+        }
+
+        /* 3. 主内容弹窗样式 */
+        .main-content {
+            background: #fff;
+            padding: 40px 60px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.2);
+            text-align: center;
+            display: none;
+            z-index: 80;
+            position: relative;
+        }
+        .content-title {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .content-title::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: #3498db;
+            margin: 10px auto 0;
+        }
+        .message-list {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+        .message-list li {
+            color: #3498db;
+            font-size: 20px;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        .confirm-btn {
+            padding: 12px 30px;
+            background: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .confirm-btn:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+        }
+
+        /* 4. 雪花样式 */
+        .snow {
+            position: absolute;
+            color: #fff;
+            font-size: 16px;
+            animation: snowfall linear infinite;
+            z-index: 1;
+            pointer-events: none; /* 雪花不阻挡点击 */
+        }
+        @keyframes snowfall {
+            0% { transform: translateY(-10px); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        /* 5. 随机分布卡片样式（核心修改） */
+        .cards-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            z-index: 70;
+            pointer-events: none; /* 不阻挡后续操作（可选） */
+        }
+        .card {
+            position: absolute;
+            width: 80px; /* 缩小卡片尺寸，适配100个 */
+            padding: 8px;
+            background: rgba(255, 200, 220, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 12px;
+            color: #333;
+            animation: fadeIn 1s ease forwards;
+            opacity: 0;
+            pointer-events: auto; /* 允许点击卡片（可选） */
+        }
+        /* 保留中间提示卡片 */
+        .center-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            padding: 15px;
+            background: #ffc0cb;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #e91e63;
+            z-index: 80;
+            animation: pulse 2s ease-in-out infinite;
+            pointer-events: auto;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 1. 初始弹窗 -->
+    <div class="start-popup" id="startPopup">
+        <h2>❄️ 立冬专属礼物 ❄️</h2>
+        <p>你有一份立冬专属心意，确定要打开吗？</p>
+    </div>
+
+    <!-- 2. 过渡页面 -->
+    <div class="transition-page" id="transitionPage">
+        <h2 class="transition-title">❄️ 冬日小叮嘱 ❄️</h2>
+        <p class="transition-text">天气转凉，记得添衣保暖<br>愿所有烦恼都随雪花飘落</p>
+        <button class="next-btn" id="nextBtn">继续查看</button>
+    </div>
+
+    <!-- 3. 主内容弹窗 -->
+    <div class="main-content" id="mainContent">
+        <h1 class="content-title">❄️ 立冬安康 ❄️</h1>
+        <ul class="message-list">
+            <li>这是许浩制作的立冬祝福捏</li>
+        </ul>
+        <button class="confirm-btn" id="confirmBtn">查看爱心祝福</button>
+    </div>
+
+    <!-- 4. 随机卡片容器 -->
+    <div class="cards-container" id="cardsContainer">
+        <!-- 中间提示卡片 -->
+        <div class="center-card">
+            <span>💖提示</span>
+            <p>别熬夜玩手机</p>
+        </div>
+        <!-- 卡片会通过JS动态生成100个，无需手动添加 -->
+    </div>
+
+    <script>
+        // 雪花效果生成
+        function createSnow() {
+            const snow = document.createElement("div");
+            snow.className = "snow";
+            snow.textContent = "❄️";
+            snow.style.left = Math.random() * 100 + "vw";
+            snow.style.animationDuration = Math.random() * 5 + 5 + "s";
+            snow.style.opacity = Math.random() * 0.5 + 0.5;
+            document.body.appendChild(snow);
+            setTimeout(() => snow.remove(), 10000);
+        }
+        setInterval(createSnow, 300);
+
+        // 生成100个随机分布的卡片（核心功能）
+        function createRandomCards() {
+            const container = document.getElementById("cardsContainer");
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            // 卡片文案库（可自行添加/修改）
+            const cardTexts = [
+                "哈", "基", "米", "南", "北", "路", "多", "哈压库", "奶龙", "曼波",
+                "哦莫吉利", "曼波曼波", "大狗叫叫叫", "立冬快乐", "立冬快乐", "立冬快乐", "350234", "666", "666", "666",
+                "注意保暖", "注意保暖", "注意保暖", "没压力", "很快乐", "注意保暖", "常欢笑", "没悲伤", "注意保暖", "过体测",
+                "注意保暖", "注意保暖", "350234", "多喜乐", "注意保暖", "曼波", "曼波", "注意保暖", "过体测", "过体测",
+                "顺风顺水", "心想事成", "一帆风顺", "误会你了", "前程似锦", "喜气洋洋", "立冬快乐", "立冬快乐", "误会你了", "误会你了",
+                "误会你了", "天天开心", "好运连连", "立冬快乐", "立冬快乐", "注意保暖", "天天开心", "天天开心", "误会你了", "欣欣向荣",
+                "平安喜乐", "天天开心", "天天开心", "吉祥安康", "立冬快乐", "过体测", "立冬快乐", "立冬快乐", "春风得意", "大展宏图",
+                "误会你了", "一帆风顺", "万事如意", "平安是福", "健康是金", "快乐相伴", "好运相随", "福气临门", "喜气盈门", "笑靥如花",
+                "立冬快乐", "奶龙", "奶龙", "奶龙", "奶龙", "春风满面", "和气生财", "奶龙", "奶龙", "四季平安",
+                "过体测", "立冬快乐", "注意保暖", "百事可乐", "注意保暖", "注意保暖", "立冬安康", "注意保暖", "注意保暖", "注意保暖"
+            ];
+
+            // 生成100个卡片
+            for (let i = 0; i < 100; i++) {
+                const card = document.createElement("div");
+                card.className = "card";
+                // 随机取文案（循环使用文案库）
+                const randomText = cardTexts[i % cardTexts.length];
+                card.textContent = randomText;
+                // 随机位置（避免卡片超出屏幕）
+                const randomLeft = Math.random() * (screenWidth - 100); // 减100避免右侧超出
+                const randomTop = Math.random() * (screenHeight - 100); // 减100避免底部超出
+                // 随机动画延迟（营造依次出现效果）
+                const randomDelay = Math.random() * 3 + 0.1 + "s";
+
+                // 赋值样式
+                card.style.left = randomLeft + "px";
+                card.style.top = randomTop + "px";
+                card.style.animationDelay = randomDelay;
+
+                container.appendChild(card);
+            }
+        }
+
+        // 页面元素获取
+        const startPopup = document.getElementById("startPopup");
+        const transitionPage = document.getElementById("transitionPage");
+        const mainContent = document.getElementById("mainContent");
+        const cardsContainer = document.getElementById("cardsContainer");
+        const nextBtn = document.getElementById("nextBtn");
+        const confirmBtn = document.getElementById("confirmBtn");
+
+        // 页面流程交互
+        startPopup.addEventListener("click", () => {
+            startPopup.style.display = "none";
+            transitionPage.style.display = "flex";
+        });
+
+        nextBtn.addEventListener("click", () => {
+            transitionPage.style.display = "none";
+            mainContent.style.display = "block";
+        });
+
+        confirmBtn.addEventListener("click", () => {
+            mainContent.style.display = "none";
+            cardsContainer.style.display = "block";
+            // 显示容器后生成卡片（确保动画正常触发）
+            setTimeout(createRandomCards, 100);
+        });
+    </script>
+</body>
+</html>
