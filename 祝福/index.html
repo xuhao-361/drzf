@@ -3,34 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>祝福初始页</title>
-  <!-- CSS：美化+预设显示状态 -->
+  <title>生日祝福页面</title>
+  <!-- 所有 CSS 样式整合到这里，只留一个 <style> 标签 -->
   <style>
-    /* 初始页容器：占满整个屏幕 */
+    /* 初始页样式 */
     .start-page {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: #fdf2f8; /* 浅粉色背景 */
+      background: #fdf2f8;
       display: flex;
-      flex-direction: column; /* 文字+图片垂直排列 */
-      justify-content: center; /* 水平居中 */
-      align-items: center; /* 垂直居中 */
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       text-align: center;
     }
-    /* 初始页图片样式 */
     .start-pic {
-      width: 250px; /* 图片宽度，适配手机 */
-      border-radius: 10px; /* 圆角美化 */
+      width: 250px;
+      border-radius: 10px;
       margin-bottom: 20px;
     }
-    /* 文字样式 */
     .start-text {
       font-size: 22px;
       color: #2d3748;
       margin-bottom: 30px;
     }
-    /* 按钮样式 */
     .next-btn {
       padding: 12px 24px;
       background: #ff8da1;
@@ -40,90 +37,35 @@
       font-size: 18px;
       cursor: pointer;
     }
-    /* 隐藏其他页面（默认不显示） */
-    .anim-page, .interact-page {
-      display: none;
-    }
-  </style>
-</head>
-<body>
-  <!-- 第一页：初始页面 -->
-  <div class="start-page">
-    <img src="images/page1.png" class="start-pic" alt="初始页图片">
-    <p class="start-text">这里是专属制作的生日祝福捏～</p>
-    <button class="next-btn" id="startNextBtn">点击进入下一环节</button>
-  </div>
 
-  <!-- 第二页：动画页面（暂时隐藏） -->
-  <div class="anim-page" id="animPage">
-    <!-- 后续添加内容 -->
-  </div>
-
-  <!-- 第三页：互动页面（暂时隐藏） -->
-  <div class="interact-page" id="interactPage">
-    <!-- 后续添加内容 -->
-  </div>
-
-  <!-- 背景音乐（初始页） -->
-  <audio id="startMusic" src="music/birthday.mp3" preload="auto" loop></audio>
-
-  <!-- JS：控制初始页逻辑 -->
-  <script>
-    // 1. 获取元素
-    const startPage = document.querySelector(".start-page");
-    const startMusic = document.getElementById("startMusic");
-    const startNextBtn = document.getElementById("startNextBtn");
-    const animPage = document.getElementById("animPage");
-
-    // 2. 解决浏览器自动播放限制：用户点击页面任意位置后播放背景音乐
-    document.body.addEventListener("click", function() {
-      if (startMusic.paused) { // 如果音乐没播放
-        startMusic.play(); // 播放初始页音乐
-      }
-    }, { once: true }); // 只触发一次（避免重复点击重复播放）
-
-    // 3. 点击按钮：进入第二页（动画页）
-    startNextBtn.addEventListener("click", function() {
-      startPage.style.display = "none"; // 隐藏初始页
-      animPage.style.display = "flex"; // 显示动画页
-      startMusic.pause(); // 暂停初始页音乐
-    });
-  </script>
-</body>
-</html>
-<!-- 接上面的代码，只修改「第二页内容」和补充JS/CSS -->
-<head>
-  <style>
-    /* 新增：第二页动画页面样式 */
+    /* 第二页（动画页）样式 */
     .anim-page {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: #f0f8ff; /* 浅蓝色背景 */
+      background: #f0f8ff;
+      display: none; /* 默认隐藏 */
       justify-content: center;
       align-items: center;
       text-align: center;
     }
-    /* 自制动画：图片从左滑入+闪烁 */
     @keyframes slideIn {
-      0% { transform: translateX(-50px); opacity: 0; } /* 初始位置：左边50px，透明 */
-      50% { transform: translateX(0); opacity: 1; } /* 中间位置：居中，显示 */
-      70% { transform: scale(1.05); } /* 轻微放大 */
-      100% { transform: scale(1); } /* 恢复原大小 */
+      0% { transform: translateX(-50px); opacity: 0; }
+      50% { transform: translateX(0); opacity: 1; }
+      70% { transform: scale(1.05); }
+      100% { transform: scale(1); }
     }
     .anim-pic {
       width: 300px;
       border-radius: 10px;
-      animation: slideIn 3s ease forwards; /* 应用动画：3秒完成 */
+      animation: slideIn 3s ease forwards;
       margin-bottom: 20px;
     }
-    /* 动画页文字样式 */
     .anim-text {
       font-size: 20px;
       color: #2d3748;
       margin-bottom: 30px;
     }
-    /* 动画页按钮 */
     .anim-next-btn {
       padding: 12px 24px;
       background: #4299e1;
@@ -133,50 +75,14 @@
       font-size: 18px;
       cursor: pointer;
     }
-  </style>
-</head>
-<body>
-  <!-- 第二页：动画页面（补充内容） -->
-  <div class="anim-page" id="animPage">
-    <img src="images/page2.png" class="anim-pic" alt="动画页图片">
-    <p class="anim-text">愿这份祝福像动画一样，温暖你的每一天～</p>
-    <button class="anim-next-btn" id="animNextBtn">继续解锁惊喜</button>
-  </div>
 
-  <!-- 新增：动画页音乐 -->
-  <audio id="animMusic" src="music/anim.mp3" preload="auto" loop> ></audio>
-
-  <!-- JS：补充动画页逻辑 -->
-  <script>
-    // 新增：获取动画页元素
-    const animMusic = document.getElementById("animMusic");
-    const animNextBtn = document.getElementById("animNextBtn");
-    const interactPage = document.getElementById("interactPage");
-
-    // 显示动画页时，自动播放动画音乐（因为用户之前点击过页面，已满足交互要求）
-    startNextBtn.addEventListener("click", function() {
-      // 之前的代码不变，新增下面一行
-      animMusic.play(); // 播放动画页音乐
-    });
-
-    // 点击动画页按钮：进入第三页（互动页）
-    animNextBtn.addEventListener("click", function() {
-      animPage.style.display = "none"; // 隐藏动画页
-      interactPage.style.display = "flex"; // 显示互动页
-      animMusic.pause(); // 暂停动画页音乐
-    });
-  </script>
-</body>
-</html>
-<!-- 接上面的代码，修改「第三页内容」和补充JS/CSS -->
-<head>
-  <style>
-    /* 新增：第三页互动页面样式 */
+    /* 第三页（互动页）样式 */
     .interact-page {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
       background: #f5fafe;
+      display: none; /* 默认隐藏 */
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -186,7 +92,7 @@
       width: 280px;
       border-radius: 10px;
       margin-bottom: 20px;
-      cursor: pointer; /* 鼠标悬浮变手型，提示可点击 */
+      cursor: pointer;
     }
     .interact-text {
       font-size: 20px;
@@ -201,44 +107,85 @@
   </style>
 </head>
 <body>
-  <!-- 第三页：互动页面（补充内容） -->
+  <!-- 所有页面容器放在同一个 <body> 里 -->
+  <!-- 第一页：初始页 -->
+  <div class="start-page">
+    <img src="images/page1.png" class="start-pic" alt="初始页图片">
+    <p class="start-text">这里是专属制作的生日祝福捏～</p>
+    <button class="next-btn" id="startNextBtn">点击进入下一环节</button>
+  </div>
+
+  <!-- 第二页：动画页 -->
+  <div class="anim-page" id="animPage">
+    <img src="images/page2.png" class="anim-pic" alt="动画页图片">
+    <p class="anim-text">愿这份祝福像动画一样，温暖你的每一天～</p>
+    <button class="anim-next-btn" id="animNextBtn">继续解锁惊喜</button>
+  </div>
+
+  <!-- 第三页：互动页 -->
   <div class="interact-page" id="interactPage">
     <p class="interact-text">最后一份惊喜，点击图片查收～</p>
     <p class="tip-text">（点击一次播放音乐，再点击切换图片）</p>
     <img src="images/interact-pic.png" class="interact-pic" id="interactPic">
   </div>
 
-  <!-- 新增：互动页音乐 -->
+  <!-- 所有音乐标签放在这里 -->
+  <audio id="startMusic" src="music/birthday.mp3" preload="auto" loop></audio>
+  <audio id="animMusic" src="music/anim.mp3" preload="auto" loop></audio>
   <audio id="interactMusic" src="music/interact.mp3" preload="auto"> ></audio>
 
-  <!-- JS：补充互动页逻辑 -->
+  <!-- 所有 JS 脚本整合到这里，只留一个 <script> 标签 -->
   <script>
-    // 新增：获取互动页元素
+    // 1. 获取所有需要的元素
+    const startPage = document.querySelector(".start-page");
+    const startMusic = document.getElementById("startMusic");
+    const startNextBtn = document.getElementById("startNextBtn");
+    const animPage = document.getElementById("animPage");
+    const animMusic = document.getElementById("animMusic");
+    const animNextBtn = document.getElementById("animNextBtn");
+    const interactPage = document.getElementById("interactPage");
     const interactPic = document.getElementById("interactPic");
     const interactMusic = document.getElementById("interactMusic");
-    // 准备第二张互动图片（可选，实现切换效果）
-    const secondPic = "images/interact-pic2.png"; // 你可以再准备一张图片
-    let isFirstPic = true; // 标记当前显示的是第一张图
+    const secondPic = "images/interact-pic2.png";
+    let isFirstPic = true;
 
-    // 点击图片：播放互动音乐 + 切换图片
+    // 2. 初始页：点击页面播放背景音乐
+    document.body.addEventListener("click", function() {
+      if (startMusic.paused) {
+        startMusic.play();
+      }
+    }, { once: true });
+
+    // 3. 点击初始页按钮 → 进入动画页
+    startNextBtn.addEventListener("click", function() {
+      startPage.style.display = "none";
+      animPage.style.display = "flex"; // 显示第二页
+      startMusic.pause();
+      animMusic.play(); // 播放动画页音乐
+    });
+
+    // 4. 点击动画页按钮 → 进入互动页
+    animNextBtn.addEventListener("click", function() {
+      animPage.style.display = "none";
+      interactPage.style.display = "flex";
+      animMusic.pause();
+    });
+
+    // 5. 互动页：点击图片播放音乐+切换图片
     interactPic.addEventListener("click", function() {
-      // 1. 播放/暂停互动音乐
       if (interactMusic.paused) {
         interactMusic.play();
       } else {
         interactMusic.pause();
       }
-
-      // 2. 切换图片（可选功能）
       if (isFirstPic) {
-        interactPic.src = secondPic; // 切换到第二张图
+        interactPic.src = secondPic;
         isFirstPic = false;
       } else {
-        interactPic.src = "images/interact-pic.png"; // 切换回第一张图
+        interactPic.src = "images/interact-pic.png";
         isFirstPic = true;
       }
     });
   </script>
 </body>
-
 </html>
