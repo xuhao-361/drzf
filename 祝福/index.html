@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>生日祝福页面</title>
-  <!-- 所有 CSS 样式整合到这里，只留一个 <style> 标签 -->
+  <!-- 所有 CSS 样式整合（新增烟花动画） -->
   <style>
     /* 初始页样式 */
     .start-page {
@@ -87,22 +87,51 @@
       justify-content: center;
       align-items: center;
       text-align: center;
+      overflow: hidden; /* 隐藏烟花溢出部分 */
     }
     .interact-pic {
       width: 280px;
       border-radius: 10px;
       margin-bottom: 20px;
       cursor: pointer;
+      z-index: 10; /* 确保图片在烟花上方 */
     }
     .interact-text {
       font-size: 20px;
       color: #2d3748;
       margin-bottom: 10px;
+      z-index: 10;
     }
     .tip-text {
       font-size: 16px;
       color: #718096;
       margin-bottom: 30px;
+      z-index: 10;
+    }
+
+    /* 新增：烟花动画样式 */
+    .firework {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      transform-origin: center;
+      z-index: 1; /* 烟花在图片下方 */
+    }
+    /* 烟花炸开动画 */
+    @keyframes fireworkBurst {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(8); /* 炸开扩大 */
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(12);
+        opacity: 0; /* 逐渐消失 */
+      }
     }
   </style>
 </head>
@@ -118,23 +147,23 @@
   <!-- 第二页：动画页 -->
   <div class="anim-page" id="animPage">
     <img src="images/page2.png" class="anim-pic" alt="动画页图片">
-    <p class="anim-text">愿这份祝福像动画一样，温暖你的每一天～</p>
-    <button class="anim-next-btn" id="animNextBtn">继续解锁惊喜</button>
+    <p class="anim-text">愿这份祝福温暖你的每一天～</p>
+    <button class="anim-next-btn" id="animNextBtn">生日快乐喵</button>
   </div>
 
   <!-- 第三页：互动页 -->
   <div class="interact-page" id="interactPage">
-    <p class="interact-text">最后一份惊喜，点击图片查收～</p>
-    <p class="tip-text">（点击一次播放音乐，再点击切换图片）</p>
-    <img src="images/interact-pic.png" class="interact-pic" id="interactPic">
+    <p class="interact-text">还有惊喜，点击图片</p>
+    <p class="tip-text">燃尽了</p>
+    <img src="images/page3.png" class="interact-pic" id="interactPic">
   </div>
 
   <!-- 所有音乐标签放在这里 -->
-  <audio id="startMusic" src="music/birthday.mp3" preload="auto" loop></audio>
-  <audio id="animMusic" src="music/anim.mp3" preload="auto" loop></audio>
+  <audio id="startMusic" src="music/birthday.mp3" preload="auto" loop> ></audio>
+  <audio id="animMusic" src="music/anim.mp3" preload="auto" loop> ></audio>
   <audio id="interactMusic" src="music/interact.mp3" preload="auto"> ></audio>
 
-  <!-- 所有 JS 脚本整合到这里，只留一个 <script> 标签 -->
+  <!-- 所有 JS 脚本整合（核心修改：全屏烟花逻辑） -->
   <script>
     // 1. 获取所有需要的元素
     const startPage = document.querySelector(".start-page");
@@ -146,7 +175,7 @@
     const interactPage = document.getElementById("interactPage");
     const interactPic = document.getElementById("interactPic");
     const interactMusic = document.getElementById("interactMusic");
-    const secondPic = "images/interact-pic2.png";
+    const secondPic = "images/page4.png"; // 统一命名为page4，贴合你的习惯
     let isFirstPic = true;
 
     // 2. 初始页：点击页面播放背景音乐
@@ -159,9 +188,9 @@
     // 3. 点击初始页按钮 → 进入动画页
     startNextBtn.addEventListener("click", function() {
       startPage.style.display = "none";
-      animPage.style.display = "flex"; // 显示第二页
+      animPage.style.display = "flex";
       startMusic.pause();
-      animMusic.play(); // 播放动画页音乐
+      animMusic.play();
     });
 
     // 4. 点击动画页按钮 → 进入互动页
@@ -171,19 +200,53 @@
       animMusic.pause();
     });
 
-    // 5. 互动页：点击图片播放音乐+切换图片
+    // 新增：生成随机烟花颜色
+    function getRandomColor() {
+      const colors = ["#ff0000", "#ff9900", "#ffff00", "#00ff00", "#0099ff", "#9900ff", "#ff00ff"];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    // 新增：创建单个烟花（位置改为随机，而非点击位置）
+    function createFirework() {
+      const firework = document.createElement("div");
+      firework.className = "firework";
+      // 关键修改：烟花位置 = 屏幕随机坐标（全屏分布）
+      firework.style.left = Math.random() * 100 + "vw"; // 水平方向随机（0-100%屏幕宽度）
+      firework.style.top = Math.random() * 100 + "vh"; // 垂直方向随机（0-100%屏幕高度）
+      // 随机颜色
+      firework.style.background = getRandomColor();
+      // 随机动画延迟（0-0.8秒），让烟花不是同时炸开，更有层次感
+      firework.style.animationDelay = Math.random() * 0.8 + "s";
+      // 应用炸开动画
+      firework.style.animation = "fireworkBurst 1.5s ease forwards";
+      // 添加到互动页
+      interactPage.appendChild(firework);
+      // 1.5秒后删除烟花元素（避免占用资源）
+      setTimeout(() => firework.remove(), 1500);
+    }
+
+    // 5. 互动页：点击图片 → 播放音乐+切换图片+全屏烟花（核心修改）
     interactPic.addEventListener("click", function() {
+      // 播放/暂停音乐
       if (interactMusic.paused) {
         interactMusic.play();
       } else {
         interactMusic.pause();
       }
+
+      // 切换图片
       if (isFirstPic) {
         interactPic.src = secondPic;
         isFirstPic = false;
       } else {
-        interactPic.src = "images/interact-pic.png";
+        interactPic.src = "images/page3.png";
         isFirstPic = true;
+      }
+
+      // 关键修改：生成30个烟花（数量可调整），全屏随机分布
+      const fireworkCount = 30; // 烟花数量，越多越密集（建议20-40个）
+      for (let i = 0; i < fireworkCount; i++) {
+        createFirework(); // 不再传点击坐标，用随机坐标
       }
     });
   </script>
