@@ -158,12 +158,12 @@
     <img src="images/page3.png" class="interact-pic" id="interactPic">
   </div>
 
-  <!-- 所有音乐标签放在这里 -->
+  <!-- 所有音乐标签-->
   <audio id="startMusic" src="music/birthday.mp3" preload="auto" loop> ></audio>
   <audio id="animMusic" src="music/anim.mp3" preload="auto" loop> ></audio>
   <audio id="interactMusic" src="music/interact.mp3" preload="auto"> ></audio>
 
-  <!-- 所有 JS 脚本整合（核心修改：全屏烟花逻辑） -->
+  <!-- 所有 JS 脚本整合 -->
   <script>
     // 1. 获取所有需要的元素
     const startPage = document.querySelector(".start-page");
@@ -175,7 +175,7 @@
     const interactPage = document.getElementById("interactPage");
     const interactPic = document.getElementById("interactPic");
     const interactMusic = document.getElementById("interactMusic");
-    const secondPic = "images/page4.png"; // 统一命名为page4，贴合你的习惯
+    const secondPic = "images/page4.png"; 
     let isFirstPic = true;
 
     // 2. 初始页：点击页面播放背景音乐
@@ -252,3 +252,4 @@
   </script>
 </body>
 </html>
+
